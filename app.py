@@ -466,6 +466,8 @@ def main():
     active_providers = []
     if grok_key:
         active_providers.append("Grok")
+    if gemini_key:
+        active_providers.append("Gemini translation")
     if groq_key:
         active_providers.append("Groq fallback")
     if not active_providers:
@@ -479,8 +481,10 @@ def main():
         st.stop()
 
     if st.button("🎙️ မြန်မာအသံနဲ့ Dubbing လုပ်မယ်", type="primary", disabled=uploaded is None):
-        if not (grok_key or groq_key):
+        if not (grok_key or groq_key or gemini_key):
             st.info("API key မတွေ့ပါ။ Free local Whisper mode ကို အသုံးပြုနေပါတယ်။ ပထမဆုံး run မှာ Whisper model download လုပ်ရနိုင်ပါတယ်။")
+        elif gemini_key and not (grok_key or openrouter_key):
+            st.info("Gemini translation ကို အသုံးပြုနေပါတယ်။ စကားပြောစာသားဖော်ထုတ်ခြင်းအတွက် local Whisper ကို အသုံးပြုပါမယ်။")
 
         with tempfile.TemporaryDirectory() as temp_dir:
             work = Path(temp_dir)
